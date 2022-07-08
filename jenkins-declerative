@@ -1,9 +1,10 @@
 pipeline{
     agent any
+
      environment{
         PATH="/opt/maven/bin:$PATH"
-    }
-    stages{
+     }
+     stages{
         stage ("gitcheckout"){
             steps{
                 git 'https://github.com/Guru0159/jenkinsproject.git'
@@ -11,7 +12,9 @@ pipeline{
         }
         stage("Maven Build"){
             steps{
-                sh "maven clean package"
+                 
+                sh "mvn clean install package"
+
             }
         }
     }

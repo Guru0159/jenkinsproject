@@ -1,0 +1,11 @@
+pipeline{
+    agent any
+    stages{
+        stage ("gitcheckout"){
+            steps{
+                git 'https://github.com/Guru0159/jenkinsproject.git'
+            }
+
+        }
+    }
+}

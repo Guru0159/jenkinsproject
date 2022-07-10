@@ -1,21 +1,27 @@
+currentBuild.displayName="guru-shopping-#"+currentBuild.number
 pipeline{
     agent any
-
      environment{
         PATH="/opt/maven/bin:$PATH"
      }
      stages{
-        stage ("gitcheckout"){
+        stage("gitcheckout"){
             steps{
                 git 'https://github.com/Guru0159/jenkinsproject.git'
             }
         }
-        stage("Maven Build"){
+        stage("maven build"){
             steps{
-                 
                 sh "mvn clean install package"
-
+                        
             }
         }
-    }
+        stage("deploy-dev"){
+            steps{
+                sshagent(['tomcat']){
+                sh "scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/declarativepipeline_demo/webapp/target/webapp.war ec2-user@172.31.35.36:/opt/tomcat/webapps/"
+                }
+            }
+        }
+    } 
 }  

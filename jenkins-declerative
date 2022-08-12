@@ -1,16 +1,26 @@
 pipeline{
     agent any
+
+    environment{
+        PATH="/opt/maven/bin:$PATH"
+
+    }
     stages{
         stage("welcome "){
             steps{
                 echo "welcome to jenkins declarative "
             }
         }
-        stage ("gitcheckout") {
+        stage ("getcode") {
             steps{
                 git 'https://github.com/Guru0159/jenkinsproject.git'
             }
 
+        }
+        stage ("build maven"){
+            steps {
+                 sh "mvn clean package"
+            }
         }
     }
 }

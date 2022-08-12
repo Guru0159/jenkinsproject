@@ -6,7 +6,7 @@ pipeline{
                 echo "welcome to jenkins declarative "
             }
         }
-        stage ("getcode") {
+        stage ("gitcheckout") {
             steps{
                 git 'https://github.com/Guru0159/jenkinsproject.git'
             }

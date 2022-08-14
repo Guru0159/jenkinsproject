@@ -1,9 +1,9 @@
-FROM ubuntu:latest
+FROM tomcat:latest
 
 MAINTAINER  guru0159@gmail.com
 
 COPY webapp/target/webapp.war /usr/local/tomcat/webapps
 
-EXPOSE 8081
+EXPOSE 8080
 
 CMD ["catalina.sh", "run "]

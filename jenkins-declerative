@@ -1,4 +1,5 @@
 pipline{
+
  
    stage('SCM Checkout'){
     git 'https://github.com/Guru0159/jenkinsproject.git'

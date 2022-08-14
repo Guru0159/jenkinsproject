@@ -6,30 +6,33 @@ pipeline {
     }
 
     stages {
-        stage ('SCM Checkout'){
-            git 'https://github.com/Guru0159/jenkinsproject.git'
+        stage ("SCM Checkout"){
+            steps {
+                git 'https://github.com/Guru0159/jenkinsproject.git'
+            }     
         }
-       
-        stage ('Maven Build'){
+        stage ("Maven Build") {
                steps {
                    sh 'mvn clean  package'
-               }
-       
+               }   
         }
-        stage('Build Docker Image'){
-             sh "docker build -t gurupatil/myweb:5.0.0 ."
+        stage ('Build Docker Image'){
+            steps{
+                sh "docker build -t gurupatil/myweb:5.0.0 ."
+            }
+             
         }
-
-        stage('Upload To DockerHub'){             
-             sh "docker login -u gurupatil -p 2ba17pma12"
-              sh "docker push gurupatil/myweb:5.0.0"
+        stage ('Upload To DockerHub'){    
+            steps{
+                sh "docker login -u gurupatil -p 2ba17pma12"
+                sh "docker push gurupatil/myweb:5.0.0"
+            }         
         }
-           
-        stage('Deploy to Dev'){
+        stage ('Deploy to Dev'){
                sshagent(['node-1']) {
                def dockeRun = "ssh ec2-user@172.31.14.131 docker run -d -p 80:8080 --name myweb gurupatil/myweb:5.0.0"
                sh "${dockeRun}"	
-              }
-           }
+            }
+        }
     }
 }

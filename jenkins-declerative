@@ -3,7 +3,6 @@ node{
     environment {
         PATH = "$path:/opt/maven/bin"
     }
-
     stages {
     stage('SCM Checkout'){
      git 'https://github.com/Guru0159/jenkinsproject.git'

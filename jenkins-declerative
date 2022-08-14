@@ -1,15 +1,17 @@
-node{
+pipeline {
+
     agent any
     environment {
         PATH = "$path:/opt/maven/bin"
     }
+
     stages {
     stage('SCM Checkout'){
      git 'https://github.com/Guru0159/jenkinsproject.git'
 
     stage ('Maven Build'){
         steps {
-            sh 'mvn clean package'
+            sh 'mvn clean  package'
         }
 
     }
@@ -28,5 +30,4 @@ node{
         sh "${dockeRun}"	
        }
     }
-    
- }
+}

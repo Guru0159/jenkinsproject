@@ -1,26 +1,47 @@
 pipeline{
+
     agent any
+    environment {
+        PATH = "$path:/opt/maven/bin"
+      }
+    
+    stages {
 
-    environment{
-        PATH="/opt/maven/bin:$PATH"
-
-    }
-    stages{
-        stage("welcome "){
-            steps{
-                echo "welcome to jenkins declarative "
-            }
-        }
-        stage ("getcode") {
-            steps{
+        stage ("get git code") {
+            steps{ 
                 git 'https://github.com/Guru0159/jenkinsproject.git'
-            }
 
+            }
         }
         stage ("build maven"){
-            steps {
-                 sh "mvn clean package"
+            steps{
+                sh 'mvn clean  package'
             }
         }
+        stage ("build image from docker file"){
+            steps{
+                sh "docker build -t gurupatil/democontainer ."
+            }
+        }
+        stage ("push the image "){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'pass', usernameVariable: 'gurupatil')]) {
+                    sh "docker login -u $gurupatil -p $pass "
+                    sh " docker push gurupatil/democontainer "
+                }
+            }               
+        }
+        stage ("run the container") {
+            def dockerRun = "docker run -d --name myapp -p 8080:8080 gurupatil/democontainer"
+               
+                steps {
+
+                sshagent(['node-1']){ 
+
+                    sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.47.114 ${dockerRun}" 
+                }
+            }
+        }
+
     }
 }
